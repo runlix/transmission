@@ -150,6 +150,8 @@ COPY --from=transmission-deps /usr/bin/7za /usr/bin/7za
 # Copy required shared libraries - combined into fewer layers by grouping related libraries
 # libcurl libraries
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libcurl.so.* /usr/lib/${LIB_DIR}/
+# libnghttp2 (transitive dependency of libcurl for HTTP/2 support)
+COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libnghttp2.so.* /usr/lib/${LIB_DIR}/
 # libevent libraries
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libevent-*.so.* /usr/lib/${LIB_DIR}/
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libevent_pthreads-*.so.* /usr/lib/${LIB_DIR}/
