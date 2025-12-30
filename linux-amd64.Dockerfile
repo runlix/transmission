@@ -99,9 +99,10 @@ RUN cmake -B build \
  && cmake --build build \
  && cmake --install build --prefix /usr/local
 
-# Copy web UI files from source tree (CMake install may not install them to expected location)
-RUN mkdir -p /usr/local/share/transmission && \
-    cp -r /tmp/transmission/web /usr/local/share/transmission/web
+# Copy web UI files from source tree to expected location
+# Transmission expects web UI at /usr/share/transmission/public_html/ (or /usr/local/share/transmission/public_html/ with prefix)
+RUN mkdir -p /usr/local/share/transmission/public_html && \
+    cp -r /tmp/transmission/web/* /usr/local/share/transmission/public_html/
 
 # Identify library dependencies using ldd
 # #region agent log - Debug: Check all library dependencies including transitive ones
@@ -166,8 +167,8 @@ COPY --from=transmission-deps /usr/local/bin/transmission-daemon /usr/local/bin/
 COPY --from=transmission-deps /usr/local/bin/transmission-cli /usr/local/bin/transmission-cli
 COPY --from=transmission-deps /usr/local/bin/transmission-remote /usr/local/bin/transmission-remote
 
-# Copy transmission web UI files
-COPY --from=transmission-deps /usr/local/share/transmission/web /usr/local/share/transmission/web
+# Copy transmission web UI files to expected location
+COPY --from=transmission-deps /usr/local/share/transmission/public_html /usr/share/transmission/public_html
 
 # Copy unrar binary
 COPY --from=transmission-deps /usr/local/bin/unrar /usr/local/bin/unrar
