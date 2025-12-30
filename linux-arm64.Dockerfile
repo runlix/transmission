@@ -68,7 +68,8 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     libtool \
     curl \
     tar \
- && rm -rf /var/lib/apt/lists/*
+    python3 \
+&& rm -rf /var/lib/apt/lists/*
 
 # Build unrar from source
 # Source available at https://www.rarlab.com/rar_add.htm
