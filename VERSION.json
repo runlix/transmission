@@ -1,16 +1,16 @@
 {
-  "build_date": "2025-01-27T00:00:00Z",
+  "build_date": "2025-12-30T16:20:07Z",
   "sbranch": "main",
   "targets": [
     {
       "arch": "linux-amd64",
       "base": {
-        "digest": "sha256:7249f249cc4e8c8dccf96f5f87ec5759c4464120bf34f702570e5cc9dd6e6edb",
+        "digest": "sha256:84c0f7bdb233bd276f4aecd7cef9109990a19c71579feb508021c9b86407a20f",
         "image": "ghcr.io/runlix/distroless-runtime",
         "tag": "release-2025.12.29.1-linux-amd64-latest"
       },
       "builder": {
-        "digest": "sha256:ef5c368548841bdd8199a8606f6307402f7f2a2f8edc4acbc9c1c70c340bc023",
+        "digest": "sha256:a1363ada3b45cb3ebc74c78943558f8b0c2b59aaa194d8224e1b02cfd5d78583",
         "image": "docker.io/library/debian",
         "tag": "bookworm-slim"
       },
@@ -24,12 +24,12 @@
     {
       "arch": "linux-amd64",
       "base": {
-        "digest": "sha256:c63e9a5479819e5f23bcca73de62e1bb8059343a082a3f869a07acc1c5b56d9f",
+        "digest": "sha256:fd8dd700a35a5fe0363fcc4aa1369a8ffa67904721f5582e0ec51dbef6f83fc4",
         "image": "ghcr.io/runlix/distroless-runtime",
         "tag": "release-2025.12.29.1-linux-amd64-debug"
       },
       "builder": {
-        "digest": "sha256:ef5c368548841bdd8199a8606f6307402f7f2a2f8edc4acbc9c1c70c340bc023",
+        "digest": "sha256:a1363ada3b45cb3ebc74c78943558f8b0c2b59aaa194d8224e1b02cfd5d78583",
         "image": "docker.io/library/debian",
         "tag": "bookworm-slim"
       },
@@ -43,12 +43,12 @@
     {
       "arch": "linux-arm64",
       "base": {
-        "digest": "sha256:7fe64c3eedcf9dd635b623c35914941c34ace28549475a20f45169285bea9278",
+        "digest": "sha256:b72912223114b42c6f11a51fbe0ad24059f0ef3d3d5c3e12db8902e985236a30",
         "image": "ghcr.io/runlix/distroless-runtime",
         "tag": "release-2025.12.29.1-linux-arm64-latest"
       },
       "builder": {
-        "digest": "sha256:594f2f110240a0a9c94d6e2a1020f6a05b79f713fcacd8c122ad8ff26e31d107",
+        "digest": "sha256:cb7b1727683aabf9d631a6a423091ed381058ec51be0f073974c69eaa48835cc",
         "image": "docker.io/library/debian",
         "tag": "bookworm-slim"
       },
@@ -62,12 +62,12 @@
     {
       "arch": "linux-arm64",
       "base": {
-        "digest": "sha256:4e5029da564ae6a23c3e5d2f3d65813da8001d5ca858383f3ed6d855dfc45f05",
+        "digest": "sha256:d5373a60be8fecbca3f31a015e0809e5545ff368f1af5af0f5b065f976e49276",
         "image": "ghcr.io/runlix/distroless-runtime",
         "tag": "release-2025.12.29.1-linux-arm64-debug"
       },
       "builder": {
-        "digest": "sha256:594f2f110240a0a9c94d6e2a1020f6a05b79f713fcacd8c122ad8ff26e31d107",
+        "digest": "sha256:cb7b1727683aabf9d631a6a423091ed381058ec51be0f073974c69eaa48835cc",
         "image": "docker.io/library/debian",
         "tag": "bookworm-slim"
       },
@@ -81,4 +81,3 @@
   ],
   "version": "4.0.6"
 }
-
