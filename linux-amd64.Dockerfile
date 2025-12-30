@@ -132,6 +132,8 @@ RUN ldd /usr/local/bin/transmission-daemon > /tmp/transmission_deps.txt 2>&1 || 
     find /usr/lib -name "*ldap*" -type f 2>/dev/null | head -10 && \
     echo "=== Finding all liblber libraries ===" && \
     find /usr/lib -name "*lber*" -type f 2>/dev/null | head -10 && \
+    echo "=== Finding all brotli libraries ===" && \
+    find /usr/lib -name "*brotli*" -type f 2>/dev/null | head -10 && \
     echo "=== All unique library paths from ldd ===" && \
     (ldd /usr/local/bin/transmission-daemon 2>&1 | grep "=>" | awk '{print $3}' | sort -u > /tmp/all_libs.txt || true) && \
     (ldd /usr/lib/x86_64-linux-gnu/libcurl.so.4 2>&1 | grep "=>" | awk '{print $3}' | sort -u >> /tmp/all_libs.txt || true) && \
@@ -141,6 +143,7 @@ RUN ldd /usr/local/bin/transmission-daemon > /tmp/transmission_deps.txt 2>&1 || 
     (ldd /usr/lib/x86_64-linux-gnu/libgssapi_krb5.so.2 2>&1 | grep "=>" | awk '{print $3}' | sort -u >> /tmp/all_libs.txt || true) && \
     (ldd /usr/lib/x86_64-linux-gnu/libldap-2.5.so.0 2>&1 | grep "=>" | awk '{print $3}' | sort -u >> /tmp/all_libs.txt || true) && \
     (ldd /usr/lib/x86_64-linux-gnu/liblber-2.5.so.0 2>&1 | grep "=>" | awk '{print $3}' | sort -u >> /tmp/all_libs.txt || true) && \
+    (ldd /usr/lib/x86_64-linux-gnu/libbrotlidec.so.1 2>&1 | grep "=>" | awk '{print $3}' | sort -u >> /tmp/all_libs.txt || true) && \
     sort -u /tmp/all_libs.txt > /tmp/unique_libs.txt && \
     echo "=== All unique libraries needed ===" && \
     cat /tmp/unique_libs.txt
@@ -187,6 +190,8 @@ COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libgssapi_krb5.so.* /usr/lib/$
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libldap-*.so.* /usr/lib/${LIB_DIR}/
 # liblber (transitive dependency of libldap for LDAP Basic Encoding Rules)
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/liblber-*.so.* /usr/lib/${LIB_DIR}/
+# libbrotlidec (transitive dependency of libcurl for Brotli decompression support)
+COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libbrotlidec.so.* /usr/lib/${LIB_DIR}/
 # libevent libraries
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libevent-*.so.* /usr/lib/${LIB_DIR}/
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libevent_pthreads-*.so.* /usr/lib/${LIB_DIR}/
