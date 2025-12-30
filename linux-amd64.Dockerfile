@@ -137,6 +137,8 @@ COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libevent-*.so.* /usr/lib/${LIB
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libevent_pthreads-*.so.* /usr/lib/${LIB_DIR}/
 # zlib libraries
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libz.so.* /usr/lib/${LIB_DIR}/
+# libminiupnpc libraries
+COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libminiupnpc.so.* /usr/lib/${LIB_DIR}/
 
 WORKDIR /config
 USER 65532:65532
