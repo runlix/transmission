@@ -201,6 +201,34 @@ COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libldap-*.so.* /usr/lib/${LIB_
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/liblber-*.so.* /usr/lib/${LIB_DIR}/
 # libbrotlidec (transitive dependency of libcurl for Brotli decompression support)
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libbrotlidec.so.* /usr/lib/${LIB_DIR}/
+# libbrotlicommon (transitive dependency of libbrotlidec)
+COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libbrotlicommon.so.* /usr/lib/${LIB_DIR}/
+# libcom_err (transitive dependency of libkrb5/libk5crypto)
+COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libcom_err.so.* /usr/lib/${LIB_DIR}/
+# libidn2 (transitive dependency of libcurl)
+COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libidn2.so.* /usr/lib/${LIB_DIR}/
+# libunistring (transitive dependency of libidn2)
+COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libunistring.so.* /usr/lib/${LIB_DIR}/
+# libkeyutils (transitive dependency of libkrb5)
+COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libkeyutils.so.* /usr/lib/${LIB_DIR}/
+# libsasl2 (transitive dependency of libldap)
+COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libsasl2.so.* /usr/lib/${LIB_DIR}/
+# libzstd (transitive dependency)
+COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libzstd.so.* /usr/lib/${LIB_DIR}/
+# libgnutls (transitive dependency, possibly of librtmp)
+COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libgnutls.so.* /usr/lib/${LIB_DIR}/
+# libnettle (transitive dependency of libgnutls)
+COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libnettle.so.* /usr/lib/${LIB_DIR}/
+# libhogweed (transitive dependency of libgnutls)
+COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libhogweed.so.* /usr/lib/${LIB_DIR}/
+# libgmp (transitive dependency of libnettle/libhogweed)
+COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libgmp.so.* /usr/lib/${LIB_DIR}/
+# libp11-kit (transitive dependency of libgnutls)
+COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libp11-kit.so.* /usr/lib/${LIB_DIR}/
+# libtasn1 (transitive dependency of libgnutls)
+COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libtasn1.so.* /usr/lib/${LIB_DIR}/
+# libffi (transitive dependency)
+COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libffi.so.* /usr/lib/${LIB_DIR}/
 # libevent libraries
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libevent-*.so.* /usr/lib/${LIB_DIR}/
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libevent_pthreads-*.so.* /usr/lib/${LIB_DIR}/
