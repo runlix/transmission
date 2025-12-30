@@ -99,6 +99,10 @@ RUN cmake -B build \
  && cmake --build build \
  && cmake --install build --prefix /usr/local
 
+# Copy web UI files from source tree (CMake install may not install them to expected location)
+RUN mkdir -p /usr/local/share/transmission && \
+    cp -r /tmp/transmission/web /usr/local/share/transmission/web
+
 # Identify library dependencies using ldd
 RUN ldd /usr/local/bin/transmission-daemon > /tmp/transmission_deps.txt 2>&1 || true && \
     ldd /usr/local/bin/transmission-cli >> /tmp/transmission_deps.txt 2>&1 || true && \
