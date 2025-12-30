@@ -124,12 +124,17 @@ RUN ldd /usr/local/bin/transmission-daemon > /tmp/transmission_deps.txt 2>&1 || 
     find /usr/lib -name "*ssh2*" -type f 2>/dev/null | head -10 && \
     echo "=== Finding all libpsl libraries ===" && \
     find /usr/lib -name "*psl*" -type f 2>/dev/null | head -10 && \
+    echo "=== Finding all libgssapi_krb5 libraries ===" && \
+    find /usr/lib -name "*gssapi*" -type f 2>/dev/null | head -10 && \
+    echo "=== Finding all krb5 libraries ===" && \
+    find /usr/lib -name "*krb5*" -type f 2>/dev/null | head -10 && \
     echo "=== All unique library paths from ldd ===" && \
     (ldd /usr/local/bin/transmission-daemon 2>&1 | grep "=>" | awk '{print $3}' | sort -u > /tmp/all_libs.txt || true) && \
     (ldd /usr/lib/x86_64-linux-gnu/libcurl.so.4 2>&1 | grep "=>" | awk '{print $3}' | sort -u >> /tmp/all_libs.txt || true) && \
     (ldd /usr/lib/x86_64-linux-gnu/librtmp.so.1 2>&1 | grep "=>" | awk '{print $3}' | sort -u >> /tmp/all_libs.txt || true) && \
     (ldd /usr/lib/x86_64-linux-gnu/libssh2.so.1 2>&1 | grep "=>" | awk '{print $3}' | sort -u >> /tmp/all_libs.txt || true) && \
     (ldd /usr/lib/x86_64-linux-gnu/libpsl.so.5 2>&1 | grep "=>" | awk '{print $3}' | sort -u >> /tmp/all_libs.txt || true) && \
+    (ldd /usr/lib/x86_64-linux-gnu/libgssapi_krb5.so.2 2>&1 | grep "=>" | awk '{print $3}' | sort -u >> /tmp/all_libs.txt || true) && \
     sort -u /tmp/all_libs.txt > /tmp/unique_libs.txt && \
     echo "=== All unique libraries needed ===" && \
     cat /tmp/unique_libs.txt
@@ -170,6 +175,8 @@ COPY --from=transmission-deps /usr/lib/${LIB_DIR}/librtmp.so.* /usr/lib/${LIB_DI
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libssh2.so.* /usr/lib/${LIB_DIR}/
 # libpsl (transitive dependency of libcurl for Public Suffix List support)
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libpsl.so.* /usr/lib/${LIB_DIR}/
+# libgssapi_krb5 (transitive dependency of libcurl for Kerberos/GSSAPI support)
+COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libgssapi_krb5.so.* /usr/lib/${LIB_DIR}/
 # libevent libraries
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libevent-*.so.* /usr/lib/${LIB_DIR}/
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libevent_pthreads-*.so.* /usr/lib/${LIB_DIR}/
