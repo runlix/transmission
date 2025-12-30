@@ -104,11 +104,24 @@ RUN mkdir -p /usr/local/share/transmission && \
     cp -r /tmp/transmission/web /usr/local/share/transmission/web
 
 # Identify library dependencies using ldd
+# #region agent log - Debug: Check all library dependencies including transitive ones
 RUN ldd /usr/local/bin/transmission-daemon > /tmp/transmission_deps.txt 2>&1 || true && \
     ldd /usr/local/bin/transmission-cli >> /tmp/transmission_deps.txt 2>&1 || true && \
     ldd /usr/local/bin/transmission-remote >> /tmp/transmission_deps.txt 2>&1 || true && \
     echo "=== Transmission library dependencies ===" && \
-    cat /tmp/transmission_deps.txt
+    cat /tmp/transmission_deps.txt && \
+    echo "=== Checking libcurl dependencies ===" && \
+    ldd /usr/lib/aarch64-linux-gnu/libcurl.so.4 > /tmp/libcurl_deps.txt 2>&1 || true && \
+    cat /tmp/libcurl_deps.txt && \
+    echo "=== Finding all nghttp2 libraries ===" && \
+    find /usr/lib -name "*nghttp2*" -type f 2>/dev/null | head -10 && \
+    echo "=== All unique library paths from ldd ===" && \
+    (ldd /usr/local/bin/transmission-daemon 2>&1 | grep "=>" | awk '{print $3}' | sort -u > /tmp/all_libs.txt || true) && \
+    (ldd /usr/lib/aarch64-linux-gnu/libcurl.so.4 2>&1 | grep "=>" | awk '{print $3}' | sort -u >> /tmp/all_libs.txt || true) && \
+    sort -u /tmp/all_libs.txt > /tmp/unique_libs.txt && \
+    echo "=== All unique libraries needed ===" && \
+    cat /tmp/unique_libs.txt
+# #endregion agent log
 
 # STAGE 3 — distroless final image
 # Build script will pass BASE_TAG (from VERSION.json base.tag) and BASE_DIGEST
