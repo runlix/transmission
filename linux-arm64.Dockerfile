@@ -142,6 +142,7 @@ RUN ldd /usr/local/bin/transmission-daemon > /tmp/transmission_deps.txt 2>&1 || 
     (ldd /usr/lib/aarch64-linux-gnu/libpsl.so.5 2>&1 | grep "=>" | awk '{print $3}' | sort -u >> /tmp/all_libs.txt || true) && \
     (ldd /usr/lib/aarch64-linux-gnu/libgssapi_krb5.so.2 2>&1 | grep "=>" | awk '{print $3}' | sort -u >> /tmp/all_libs.txt || true) && \
     (ldd /usr/lib/aarch64-linux-gnu/libkrb5.so.3 2>&1 | grep "=>" | awk '{print $3}' | sort -u >> /tmp/all_libs.txt || true) && \
+    (ldd /usr/lib/aarch64-linux-gnu/libk5crypto.so.3 2>&1 | grep "=>" | awk '{print $3}' | sort -u >> /tmp/all_libs.txt || true) && \
     (ldd /usr/lib/aarch64-linux-gnu/libldap-2.5.so.0 2>&1 | grep "=>" | awk '{print $3}' | sort -u >> /tmp/all_libs.txt || true) && \
     (ldd /usr/lib/aarch64-linux-gnu/liblber-2.5.so.0 2>&1 | grep "=>" | awk '{print $3}' | sort -u >> /tmp/all_libs.txt || true) && \
     (ldd /usr/lib/aarch64-linux-gnu/libbrotlidec.so.1 2>&1 | grep "=>" | awk '{print $3}' | sort -u >> /tmp/all_libs.txt || true) && \
@@ -189,6 +190,8 @@ COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libpsl.so.* /usr/lib/${LIB_DIR
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libgssapi_krb5.so.* /usr/lib/${LIB_DIR}/
 # libkrb5 (transitive dependency of libgssapi_krb5 for Kerberos support)
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libkrb5.so.* /usr/lib/${LIB_DIR}/
+# libk5crypto (transitive dependency of libkrb5 for Kerberos cryptography support)
+COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libk5crypto.so.* /usr/lib/${LIB_DIR}/
 # libldap (transitive dependency of libcurl for LDAP support)
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libldap-*.so.* /usr/lib/${LIB_DIR}/
 # liblber (transitive dependency of libldap for LDAP Basic Encoding Rules)
