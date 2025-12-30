@@ -1,5 +1,5 @@
 {
-  "build_date": "2025-01-27T00:00:00Z",
+  "build_date": "2025-12-30T12:40:17Z",
   "sbranch": "main",
   "targets": [
     {
@@ -10,7 +10,7 @@
         "tag": "release-2025.12.29.1-linux-amd64-latest"
       },
       "builder": {
-        "digest": "sha256:ef5c368548841bdd8199a8606f6307402f7f2a2f8edc4acbc9c1c70c340bc023",
+        "digest": "sha256:a1363ada3b45cb3ebc74c78943558f8b0c2b59aaa194d8224e1b02cfd5d78583",
         "image": "docker.io/library/debian",
         "tag": "bookworm-slim"
       },
@@ -29,7 +29,7 @@
         "tag": "release-2025.12.29.1-linux-amd64-debug"
       },
       "builder": {
-        "digest": "sha256:ef5c368548841bdd8199a8606f6307402f7f2a2f8edc4acbc9c1c70c340bc023",
+        "digest": "sha256:a1363ada3b45cb3ebc74c78943558f8b0c2b59aaa194d8224e1b02cfd5d78583",
         "image": "docker.io/library/debian",
         "tag": "bookworm-slim"
       },
@@ -48,7 +48,7 @@
         "tag": "release-2025.12.29.1-linux-arm64-latest"
       },
       "builder": {
-        "digest": "sha256:594f2f110240a0a9c94d6e2a1020f6a05b79f713fcacd8c122ad8ff26e31d107",
+        "digest": "sha256:cb7b1727683aabf9d631a6a423091ed381058ec51be0f073974c69eaa48835cc",
         "image": "docker.io/library/debian",
         "tag": "bookworm-slim"
       },
@@ -67,7 +67,7 @@
         "tag": "release-2025.12.29.1-linux-arm64-debug"
       },
       "builder": {
-        "digest": "sha256:594f2f110240a0a9c94d6e2a1020f6a05b79f713fcacd8c122ad8ff26e31d107",
+        "digest": "sha256:cb7b1727683aabf9d631a6a423091ed381058ec51be0f073974c69eaa48835cc",
         "image": "docker.io/library/debian",
         "tag": "bookworm-slim"
       },
@@ -81,4 +81,3 @@
   ],
   "version": "4.0.6"
 }
-
