@@ -58,6 +58,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     libevent-dev \
     libssl-dev \
     zlib1g-dev \
+    libminiupnpc-dev \
     libcurl4 \
     libevent-2.1-7 \
     findutils \
