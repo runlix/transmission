@@ -1,0 +1,16 @@
+name: call-build
+
+on:
+  workflow_dispatch:
+  push:
+    branches-ignore:
+      - 'main'
+
+jobs:
+  call:
+    permissions:
+      contents: write
+      packages: write
+    uses: runlix/build-workflow/.github/workflows/build-on-call.yml@main
+    secrets: inherit
+
