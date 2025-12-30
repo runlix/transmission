@@ -113,11 +113,17 @@ RUN ldd /usr/local/bin/transmission-daemon > /tmp/transmission_deps.txt 2>&1 || 
     echo "=== Checking libcurl dependencies ===" && \
     ldd /usr/lib/aarch64-linux-gnu/libcurl.so.4 > /tmp/libcurl_deps.txt 2>&1 || true && \
     cat /tmp/libcurl_deps.txt && \
+    echo "=== Checking librtmp dependencies ===" && \
+    (ldd /usr/lib/aarch64-linux-gnu/librtmp.so.1 > /tmp/librtmp_deps.txt 2>&1 || true) && \
+    cat /tmp/librtmp_deps.txt && \
     echo "=== Finding all nghttp2 libraries ===" && \
     find /usr/lib -name "*nghttp2*" -type f 2>/dev/null | head -10 && \
+    echo "=== Finding all librtmp libraries ===" && \
+    find /usr/lib -name "*rtmp*" -type f 2>/dev/null | head -10 && \
     echo "=== All unique library paths from ldd ===" && \
     (ldd /usr/local/bin/transmission-daemon 2>&1 | grep "=>" | awk '{print $3}' | sort -u > /tmp/all_libs.txt || true) && \
     (ldd /usr/lib/aarch64-linux-gnu/libcurl.so.4 2>&1 | grep "=>" | awk '{print $3}' | sort -u >> /tmp/all_libs.txt || true) && \
+    (ldd /usr/lib/aarch64-linux-gnu/librtmp.so.1 2>&1 | grep "=>" | awk '{print $3}' | sort -u >> /tmp/all_libs.txt || true) && \
     sort -u /tmp/all_libs.txt > /tmp/unique_libs.txt && \
     echo "=== All unique libraries needed ===" && \
     cat /tmp/unique_libs.txt
@@ -152,6 +158,8 @@ COPY --from=transmission-deps /usr/bin/7za /usr/bin/7za
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libcurl.so.* /usr/lib/${LIB_DIR}/
 # libnghttp2 (transitive dependency of libcurl for HTTP/2 support)
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libnghttp2.so.* /usr/lib/${LIB_DIR}/
+# librtmp (transitive dependency of libcurl for RTMP support)
+COPY --from=transmission-deps /usr/lib/${LIB_DIR}/librtmp.so.* /usr/lib/${LIB_DIR}/
 # libevent libraries
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libevent-*.so.* /usr/lib/${LIB_DIR}/
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libevent_pthreads-*.so.* /usr/lib/${LIB_DIR}/
