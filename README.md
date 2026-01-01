@@ -1,6 +1,10 @@
-# Transmission Distroless
+# Transmission
 
-Kubernetes-native distroless Docker image for [Transmission](https://github.com/transmission/transmission).
+Kubernetes-native distroless Docker image for [Transmission](https://github.com/transmission/transmission) - a BitTorrent client.
+
+## Purpose
+
+Provides a minimal, secure Docker image for running Transmission in Kubernetes environments. Built on the `distroless-runtime` base image with only the essential dependencies required for Transmission to function.
 
 ## Features
 
@@ -22,7 +26,7 @@ docker run -d \
   -p 51413:51413/udp \
   -v /path/to/config:/config \
   -v /path/to/downloads:/downloads \
-  ghcr.io/runlix/transmission-distroless:release
+  ghcr.io/runlix/transmission:release-latest
 ```
 
 ### Kubernetes
@@ -37,7 +41,7 @@ spec:
     spec:
       containers:
       - name: transmission
-        image: ghcr.io/runlix/transmission-distroless:release
+        image: ghcr.io/runlix/transmission:release-latest
         ports:
         - containerPort: 9091
           name: webui
