@@ -1,0 +1,31 @@
+# Documentation
+README.md
+*.md
+
+# Build scripts
+update-digests.sh
+update-versions.sh
+
+# Git files
+.git
+.gitignore
+
+# CI/CD
+.github
+
+# Metadata files
+tags.json
+links.json
+
+# Note: VERSION.json is excluded since values are passed as build args
+
+# IDE files
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+

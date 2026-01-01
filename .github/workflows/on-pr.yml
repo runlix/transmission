@@ -1,0 +1,20 @@
+name: On PR Flow
+
+on:
+  pull_request:
+    branches:
+      - release
+    types:
+      - opened
+      - reopened
+      - synchronize
+    paths:
+      - linux-amd64.Dockerfile
+      - linux-arm64.Dockerfile
+      - VERSION.json
+
+jobs:
+  test:
+    uses: runlix/build-workflow/.github/workflows/on-pr.yml@main
+    secrets: inherit
+
