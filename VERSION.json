@@ -1,5 +1,5 @@
 {
-  "build_date": "2026-01-14T01:14:10Z",
+  "build_date": "2026-02-02T02:54:32Z",
   "sbranch": "main",
   "targets": [
     {
@@ -17,7 +17,7 @@
       "dockerfile": "linux-amd64.Dockerfile",
       "enabled": true,
       "name": "amd64-latest",
-      "package_url": "https://github.com/transmission/transmission/releases/download/4.0.6/transmission-4.0.6.tar.xz",
+      "package_url": "https://github.com/transmission/transmission/releases/download/4.1.0/transmission-4.1.0.tar.xz",
       "tags": [],
       "variant": "latest"
     },
@@ -36,7 +36,7 @@
       "dockerfile": "linux-amd64.Dockerfile",
       "enabled": true,
       "name": "amd64-debug",
-      "package_url": "https://github.com/transmission/transmission/releases/download/4.0.6/transmission-4.0.6.tar.xz",
+      "package_url": "https://github.com/transmission/transmission/releases/download/4.1.0/transmission-4.1.0.tar.xz",
       "tags": [],
       "variant": "debug"
     },
@@ -55,7 +55,7 @@
       "dockerfile": "linux-arm64.Dockerfile",
       "enabled": true,
       "name": "arm64-latest",
-      "package_url": "https://github.com/transmission/transmission/releases/download/4.0.6/transmission-4.0.6.tar.xz",
+      "package_url": "https://github.com/transmission/transmission/releases/download/4.1.0/transmission-4.1.0.tar.xz",
       "tags": [],
       "variant": "latest"
     },
@@ -74,10 +74,10 @@
       "dockerfile": "linux-arm64.Dockerfile",
       "enabled": true,
       "name": "arm64-debug",
-      "package_url": "https://github.com/transmission/transmission/releases/download/4.0.6/transmission-4.0.6.tar.xz",
+      "package_url": "https://github.com/transmission/transmission/releases/download/4.1.0/transmission-4.1.0.tar.xz",
       "tags": [],
       "variant": "debug"
     }
   ],
-  "version": "4.0.6"
+  "version": "4.1.0"
 }
