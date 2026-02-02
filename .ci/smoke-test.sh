@@ -34,6 +34,18 @@ fi
 CONFIG_DIR=$(mktemp -d)
 chmod 777 "${CONFIG_DIR}"
 echo "Config directory: ${CONFIG_DIR}"
+
+# Create minimal settings.json to disable host whitelist
+# Note: IP whitelist is disabled via --allowed "*" CLI arg below
+# transmission-daemon has no CLI arg to disable host whitelist, requires settings.json
+# Reference: https://github.com/transmission/transmission/blob/main/docs/Editing-Configuration-Files.md
+cat > "${CONFIG_DIR}/settings.json" <<'EOF'
+{
+  "rpc-host-whitelist-enabled": false
+}
+EOF
+chmod 644 "${CONFIG_DIR}/settings.json"
+echo "Created minimal settings.json (host whitelist disabled)"
 echo ""
 
 # Cleanup function
@@ -62,6 +74,8 @@ cleanup() {
 trap cleanup EXIT
 
 # Start container (use local image, don't pull from registry)
+# Override entrypoint to pass --allowed "*" which disables IP whitelist
+# Host whitelist is disabled via settings.json (no CLI arg available)
 echo -e "${BLUE}▶️  Starting container...${NC}"
 if ! docker run \
   --pull=never \
@@ -72,8 +86,13 @@ if ! docker run \
   -e PUID=1000 \
   -e PGID=1000 \
   -e TZ=UTC \
+  --entrypoint /usr/local/bin/transmission-daemon \
   -d \
-  "${IMAGE}"; then
+  "${IMAGE}" \
+  --foreground \
+  --config-dir /config \
+  --allowed "*" \
+  --no-auth; then
   echo -e "${RED}❌ Failed to start container${NC}"
   exit 1
 fi
