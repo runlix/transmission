@@ -1,0 +1,28 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - release
+    paths:
+      - '.ci/docker-matrix.json'
+      - '*.Dockerfile'
+      - 'linux-*.Dockerfile'
+      - 'VERSION.json'
+
+permissions:
+  contents: write       # Update releases.json in main branch
+  packages: write       # Push images to GHCR, delete platform tags
+  pull-requests: write  # Required by reusable workflow (not used in release mode)
+  actions: read         # Query workflow artifacts and PR status
+
+concurrency:
+  group: release-${{ github.repository }}
+  cancel-in-progress: true
+
+jobs:
+  release:
+    uses: runlix/build-workflow/.github/workflows/build-images.yml@main
+    with:
+      pr_mode: false
+    secrets: inherit

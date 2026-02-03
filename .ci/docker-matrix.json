@@ -1,0 +1,89 @@
+{
+  "version": "4.0.6",
+  "variants": [
+    {
+      "name": "latest-amd64",
+      "enabled": true,
+      "platforms": [
+        "linux/amd64"
+      ],
+      "dockerfiles": {
+        "linux/amd64": "linux-amd64.Dockerfile"
+      },
+      "tag_suffix": "stable",
+      "build_args": {
+        "BUILDER_IMAGE": "docker.io/library/debian",
+        "BUILDER_TAG": "bookworm-slim",
+        "BUILDER_DIGEST": "sha256:09c53e50b5110eb26e0932ab77934481ce9c0068069d4f28e3e7493e51323bfe",
+        "BASE_IMAGE": "ghcr.io/runlix/distroless-runtime",
+        "BASE_TAG": "stable",
+        "BASE_DIGEST": "sha256:3b1c6c4f5d904070a72ebfc409cd296ffad717b2202233aef3a1702568c6e684",
+        "PACKAGE_URL": "https://github.com/transmission/transmission/releases/download/4.0.6/transmission-4.0.6.tar.xz"
+      },
+      "test_script": ".ci/smoke-test.sh"
+    },
+    {
+      "name": "latest-arm64",
+      "enabled": true,
+      "platforms": [
+        "linux/arm64"
+      ],
+      "dockerfiles": {
+        "linux/arm64": "linux-arm64.Dockerfile"
+      },
+      "tag_suffix": "stable",
+      "build_args": {
+        "BUILDER_IMAGE": "docker.io/library/debian",
+        "BUILDER_TAG": "bookworm-slim",
+        "BUILDER_DIGEST": "sha256:79abd3da4379967c72ac0c0e2dc9ac2204143b92224fada931ef855b8559df87",
+        "BASE_IMAGE": "ghcr.io/runlix/distroless-runtime",
+        "BASE_TAG": "stable",
+        "BASE_DIGEST": "sha256:69c8ef8fb791b563fe612e8ab23efa97f224635d057b18203c2befba280628f4",
+        "PACKAGE_URL": "https://github.com/transmission/transmission/releases/download/4.0.6/transmission-4.0.6.tar.xz"
+      },
+      "test_script": ".ci/smoke-test.sh"
+    },
+    {
+      "name": "debug-amd64",
+      "enabled": true,
+      "platforms": [
+        "linux/amd64"
+      ],
+      "dockerfiles": {
+        "linux/amd64": "linux-amd64.Dockerfile"
+      },
+      "tag_suffix": "debug",
+      "build_args": {
+        "BUILDER_IMAGE": "docker.io/library/debian",
+        "BUILDER_TAG": "bookworm-slim",
+        "BUILDER_DIGEST": "sha256:09c53e50b5110eb26e0932ab77934481ce9c0068069d4f28e3e7493e51323bfe",
+        "BASE_IMAGE": "ghcr.io/runlix/distroless-runtime",
+        "BASE_TAG": "debug",
+        "BASE_DIGEST": "sha256:cd246ef1b6e8ef3ddb3b471cb6af13132e2af38f69fc18c77fff8a97bf351a97",
+        "PACKAGE_URL": "https://github.com/transmission/transmission/releases/download/4.0.6/transmission-4.0.6.tar.xz"
+      },
+      "test_script": ".ci/smoke-test.sh"
+    },
+    {
+      "name": "debug-arm64",
+      "enabled": true,
+      "platforms": [
+        "linux/arm64"
+      ],
+      "dockerfiles": {
+        "linux/arm64": "linux-arm64.Dockerfile"
+      },
+      "tag_suffix": "debug",
+      "build_args": {
+        "BUILDER_IMAGE": "docker.io/library/debian",
+        "BUILDER_TAG": "bookworm-slim",
+        "BUILDER_DIGEST": "sha256:79abd3da4379967c72ac0c0e2dc9ac2204143b92224fada931ef855b8559df87",
+        "BASE_IMAGE": "ghcr.io/runlix/distroless-runtime",
+        "BASE_TAG": "debug",
+        "BASE_DIGEST": "sha256:8e90e3a86b12cb96706cff3ee6fcfd44e5a5f5d58993cb895a69de6ecd309cdb",
+        "PACKAGE_URL": "https://github.com/transmission/transmission/releases/download/4.0.6/transmission-4.0.6.tar.xz"
+      },
+      "test_script": ".ci/smoke-test.sh"
+    }
+  ]
+}
