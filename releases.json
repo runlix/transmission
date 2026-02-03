@@ -1,0 +1,12 @@
+{
+  "transmission": {
+    "version": "4.0.6",
+    "sha": "6e94fa5e989a057a086667838b066bcd5284734c",
+    "short_sha": "6e94fa5",
+    "timestamp": "2026-02-03T07:34:56Z",
+    "manifests": [
+      "4.0.6-debug",
+      "4.0.6-stable"
+    ]
+  }
+}
