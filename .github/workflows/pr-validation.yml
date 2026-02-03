@@ -24,7 +24,7 @@ permissions:
 
 jobs:
   validate:
-    uses: runlix/build-workflow/.github/workflows/build-images.yml@main
+    uses: runlix/build-workflow/.github/workflows/build-images-rebuild.yml@main
     with:
       pr_mode: true
       dry_run: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || false }}

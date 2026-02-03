@@ -22,7 +22,7 @@ concurrency:
 
 jobs:
   release:
-    uses: runlix/build-workflow/.github/workflows/build-images.yml@main
+    uses: runlix/build-workflow/.github/workflows/build-images-rebuild.yml@main
     with:
       pr_mode: false
     secrets: inherit
