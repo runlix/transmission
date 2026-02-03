@@ -24,7 +24,7 @@
     {
       "arch": "linux-amd64",
       "base": {
-        "digest": "sha256:fd8dd700a35a5fe0363fcc4aa1369a8ffa67904721f5582e0ec51dbef6f83fc4",
+        "digest": "sha256:98f4b71de414932439ac6ac690d7060df1f27161073c5036a7553723881bffbe",
         "image": "ghcr.io/runlix/distroless-runtime",
         "tag": "release-2025.12.29.1-linux-amd64-debug"
       },
@@ -43,7 +43,7 @@
     {
       "arch": "linux-arm64",
       "base": {
-        "digest": "sha256:b72912223114b42c6f11a51fbe0ad24059f0ef3d3d5c3e12db8902e985236a30",
+        "digest": "sha256:98f4b71de414932439ac6ac690d7060df1f27161073c5036a7553723881bffbe",
         "image": "ghcr.io/runlix/distroless-runtime",
         "tag": "release-2025.12.29.1-linux-arm64-latest"
       },
@@ -62,7 +62,7 @@
     {
       "arch": "linux-arm64",
       "base": {
-        "digest": "sha256:d5373a60be8fecbca3f31a015e0809e5545ff368f1af5af0f5b065f976e49276",
+        "digest": "sha256:98f4b71de414932439ac6ac690d7060df1f27161073c5036a7553723881bffbe",
         "image": "ghcr.io/runlix/distroless-runtime",
         "tag": "release-2025.12.29.1-linux-arm64-debug"
       },
