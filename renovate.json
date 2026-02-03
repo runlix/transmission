@@ -1,0 +1,98 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "Renovate configuration for VERSION.json updates",
+  "extends": [
+    "config:recommended"
+  ],
+  "baseBranches": ["release"],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Update Debian builder images (builder.tag + builder.digest) - https://docs.renovatebot.com/modules/manager/regex/",
+      "fileMatch": ["^VERSION\\.json$"],
+      "matchStrings": [
+        "\"tag\"\\s*:\\s*\"(?<currentValue>bookworm-slim)\"[\\s\\S]{0,500}?\"digest\"\\s*:\\s*\"(?<currentDigest>sha256:[a-f0-9]{64})\""
+      ],
+      "depNameTemplate": "docker.io/library/debian",
+      "datasourceTemplate": "docker"
+    },
+    {
+      "customType": "regex",
+      "description": "Update Distroless runtime base images (base.tag + base.digest) - https://docs.renovatebot.com/modules/datasource/docker/",
+      "fileMatch": ["^VERSION\\.json$"],
+      "matchStrings": [
+        "\"image\"\\s*:\\s*\"ghcr\\.io/runlix/distroless-runtime\"[\\s\\S]{0,200}?\"tag\"\\s*:\\s*\"(?<currentValue>[^\"]+)\"[\\s\\S]{0,200}?\"digest\"\\s*:\\s*\"(?<currentDigest>sha256:[a-f0-9]{64})\""
+      ],
+      "depNameTemplate": "ghcr.io/runlix/distroless-runtime",
+      "datasourceTemplate": "docker"
+    },
+    {
+      "customType": "regex",
+      "description": "Update Transmission version from GitHub releases - https://docs.renovatebot.com/modules/datasource/github-releases/",
+      "fileMatch": ["^VERSION\\.json$"],
+      "matchStrings": [
+        "\"version\"\\s*:\\s*\"(?<currentValue>[^\"]+)\""
+      ],
+      "depNameTemplate": "transmission/transmission",
+      "datasourceTemplate": "github-releases",
+      "extractVersionTemplate": "^v?(?<version>.*)$"
+    },
+    {
+      "customType": "regex",
+      "description": "Update Transmission package URLs from GitHub releases",
+      "fileMatch": ["^VERSION\\.json$"],
+      "matchStrings": [
+        "\"package_url\"\\s*:\\s*\"https://github\\.com/(?<depName>[^/]+/[^/]+)/releases/download/v?(?<currentValue>[^/]+)/[^\"]+\""
+      ],
+      "datasourceTemplate": "github-releases",
+      "extractVersionTemplate": "^v?(?<version>.*)$"
+    }
+  ],
+  "packageRules": [
+    {
+      "description": "Group all VERSION.json updates into daily PRs",
+      "matchFileNames": ["**/VERSION.json"],
+      "groupName": "Docker base images",
+      "schedule": ["before 3am"]
+    },
+    {
+      "description": "Separate Debian builder updates - https://docs.renovatebot.com/configuration-options/#packagerules",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["docker.io/library/debian"],
+      "groupName": "Debian builder",
+      "commitMessageTopic": "Debian builder image"
+    },
+    {
+      "description": "Separate Distroless runtime base updates",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["ghcr.io/runlix/distroless-runtime"],
+      "groupName": "Distroless runtime",
+      "commitMessageTopic": "Distroless runtime base image"
+    },
+    {
+      "description": "Group Transmission version and package URL updates with auto-merge - https://docs.renovatebot.com/key-concepts/automerge/",
+      "matchDatasources": ["github-releases"],
+      "matchPackageNames": ["transmission/transmission"],
+      "groupName": "Transmission release",
+      "commitMessageTopic": "Transmission version",
+      "automerge": true,
+      "automergeType": "pr",
+      "automergeStrategy": "squash"
+    },
+    {
+      "description": "Auto-merge digest-only updates (security patches) - https://docs.renovatebot.com/key-concepts/automerge/",
+      "matchFileNames": ["**/VERSION.json"],
+      "matchUpdateTypes": ["digest"],
+      "automerge": true,
+      "automergeType": "pr",
+      "automergeStrategy": "squash"
+    }
+  ],
+  "dependencyDashboard": true,
+  "dependencyDashboardTitle": "🔄 Dependency Updates Dashboard",
+  "dependencyDashboardApproval": false,
+  "labels": ["dependencies", "docker"],
+  "timezone": "UTC",
+  "prConcurrentLimit": 3,
+  "prHourlyLimit": 1
+}
