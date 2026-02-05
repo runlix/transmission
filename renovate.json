@@ -1,6 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "description": "Renovate configuration for VERSION.json updates",
+  "description": "Renovate configuration for docker-matrix.json updates",
   "extends": [
     "config:recommended"
   ],
@@ -8,20 +8,20 @@
   "customManagers": [
     {
       "customType": "regex",
-      "description": "Update Debian builder images (builder.tag + builder.digest) - https://docs.renovatebot.com/modules/manager/regex/",
-      "fileMatch": ["^VERSION\\.json$"],
+      "description": "Update Debian builder images (BUILDER_TAG + BUILDER_DIGEST) - https://docs.renovatebot.com/modules/manager/regex/",
+      "fileMatch": ["^\\.ci/docker-matrix\\.json$"],
       "matchStrings": [
-        "\"tag\"\\s*:\\s*\"(?<currentValue>bookworm-slim)\"[\\s\\S]{0,500}?\"digest\"\\s*:\\s*\"(?<currentDigest>sha256:[a-f0-9]{64})\""
+        "\"BUILDER_TAG\"\\s*:\\s*\"(?<currentValue>[^\"]+)\"[\\s\\S]*?\"BUILDER_DIGEST\"\\s*:\\s*\"(?<currentDigest>sha256:[a-f0-9]{64})\""
       ],
       "depNameTemplate": "docker.io/library/debian",
       "datasourceTemplate": "docker"
     },
     {
       "customType": "regex",
-      "description": "Update Distroless runtime base images (base.tag + base.digest) - https://docs.renovatebot.com/modules/datasource/docker/",
-      "fileMatch": ["^VERSION\\.json$"],
+      "description": "Update Distroless runtime base images (BASE_TAG + BASE_DIGEST) - https://docs.renovatebot.com/modules/datasource/docker/",
+      "fileMatch": ["^\\.ci/docker-matrix\\.json$"],
       "matchStrings": [
-        "\"image\"\\s*:\\s*\"ghcr\\.io/runlix/distroless-runtime\"[\\s\\S]{0,200}?\"tag\"\\s*:\\s*\"(?<currentValue>[^\"]+)\"[\\s\\S]{0,200}?\"digest\"\\s*:\\s*\"(?<currentDigest>sha256:[a-f0-9]{64})\""
+        "\"BASE_TAG\"\\s*:\\s*\"(?<currentValue>[^\"]+)\"[\\s\\S]*?\"BASE_DIGEST\"\\s*:\\s*\"(?<currentDigest>sha256:[a-f0-9]{64})\""
       ],
       "depNameTemplate": "ghcr.io/runlix/distroless-runtime",
       "datasourceTemplate": "docker"
@@ -29,7 +29,7 @@
     {
       "customType": "regex",
       "description": "Update Transmission version from GitHub releases - https://docs.renovatebot.com/modules/datasource/github-releases/",
-      "fileMatch": ["^VERSION\\.json$"],
+      "fileMatch": ["^\\.ci/docker-matrix\\.json$"],
       "matchStrings": [
         "\"version\"\\s*:\\s*\"(?<currentValue>[^\"]+)\""
       ],
@@ -40,9 +40,9 @@
     {
       "customType": "regex",
       "description": "Update Transmission package URLs from GitHub releases",
-      "fileMatch": ["^VERSION\\.json$"],
+      "fileMatch": ["^\\.ci/docker-matrix\\.json$"],
       "matchStrings": [
-        "\"package_url\"\\s*:\\s*\"https://github\\.com/(?<depName>[^/]+/[^/]+)/releases/download/v?(?<currentValue>[^/]+)/[^\"]+\""
+        "\"PACKAGE_URL\"\\s*:\\s*\"https://github\\.com/(?<depName>[^/]+/[^/]+)/releases/download/v?(?<currentValue>[^/]+)/[^\"]+\""
       ],
       "datasourceTemplate": "github-releases",
       "extractVersionTemplate": "^v?(?<version>.*)$"
@@ -50,8 +50,8 @@
   ],
   "packageRules": [
     {
-      "description": "Group all VERSION.json updates into daily PRs",
-      "matchFileNames": ["**/VERSION.json"],
+      "description": "Group all docker-matrix.json updates into daily PRs",
+      "matchFileNames": ["**/.ci/docker-matrix.json"],
       "groupName": "Docker base images",
       "schedule": ["before 3am"]
     },
@@ -81,7 +81,7 @@
     },
     {
       "description": "Auto-merge digest-only updates (security patches) - https://docs.renovatebot.com/key-concepts/automerge/",
-      "matchFileNames": ["**/VERSION.json"],
+      "matchFileNames": ["**/.ci/docker-matrix.json"],
       "matchUpdateTypes": ["digest"],
       "automerge": true,
       "automergeType": "pr",
