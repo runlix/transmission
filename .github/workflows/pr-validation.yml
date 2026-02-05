@@ -7,7 +7,6 @@ on:
       - '.ci/docker-matrix.json'
       - '*.Dockerfile'
       - 'linux-*.Dockerfile'
-      - 'VERSION.json'
   workflow_dispatch:
     inputs:
       dry_run:

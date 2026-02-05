@@ -8,7 +8,6 @@ on:
       - '.ci/docker-matrix.json'
       - '*.Dockerfile'
       - 'linux-*.Dockerfile'
-      - 'VERSION.json'
 
 permissions:
   contents: write       # Update releases.json in main branch
