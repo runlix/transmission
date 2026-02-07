@@ -1,5 +1,5 @@
 {
-  "version": "4.0.6",
+  "version": "4.1.0",
   "variants": [
     {
       "name": "latest-amd64",
@@ -18,7 +18,7 @@
         "BASE_IMAGE": "ghcr.io/runlix/distroless-runtime",
         "BASE_TAG": "stable",
         "BASE_DIGEST": "sha256:d0b92305a0095e40a6d8f346ab37f4289d2236dd4334cd13a099243408899a1b",
-        "PACKAGE_URL": "https://github.com/transmission/transmission/releases/download/4.0.6/transmission-4.0.6.tar.xz"
+        "PACKAGE_URL": "https://github.com/transmission/transmission/releases/download/4.1.0/transmission-4.1.0.tar.xz"
       },
       "test_script": ".ci/smoke-test.sh"
     },
@@ -39,7 +39,7 @@
         "BASE_IMAGE": "ghcr.io/runlix/distroless-runtime",
         "BASE_TAG": "stable",
         "BASE_DIGEST": "sha256:679f4bfb7d05609c3aeff212e2c013de415eeb4dcbf437617a43fc2441667be1",
-        "PACKAGE_URL": "https://github.com/transmission/transmission/releases/download/4.0.6/transmission-4.0.6.tar.xz"
+        "PACKAGE_URL": "https://github.com/transmission/transmission/releases/download/4.1.0/transmission-4.1.0.tar.xz"
       },
       "test_script": ".ci/smoke-test.sh"
     },
@@ -60,7 +60,7 @@
         "BASE_IMAGE": "ghcr.io/runlix/distroless-runtime",
         "BASE_TAG": "debug",
         "BASE_DIGEST": "sha256:6eb28943a0966722aaee2dc4e6b7eaa6d2b1002650d9088a1045ea18022be8fd",
-        "PACKAGE_URL": "https://github.com/transmission/transmission/releases/download/4.0.6/transmission-4.0.6.tar.xz"
+        "PACKAGE_URL": "https://github.com/transmission/transmission/releases/download/4.1.0/transmission-4.1.0.tar.xz"
       },
       "test_script": ".ci/smoke-test.sh"
     },
@@ -81,7 +81,7 @@
         "BASE_IMAGE": "ghcr.io/runlix/distroless-runtime",
         "BASE_TAG": "debug",
         "BASE_DIGEST": "sha256:a97b57fbea3cdb2c175c292ca9da431c6d34858af99acb476b04f223ebd0e6cc",
-        "PACKAGE_URL": "https://github.com/transmission/transmission/releases/download/4.0.6/transmission-4.0.6.tar.xz"
+        "PACKAGE_URL": "https://github.com/transmission/transmission/releases/download/4.1.0/transmission-4.1.0.tar.xz"
       },
       "test_script": ".ci/smoke-test.sh"
     }
