@@ -14,7 +14,7 @@
       "build_args": {
         "BUILDER_IMAGE": "docker.io/library/debian",
         "BUILDER_TAG": "bookworm-slim",
-        "BUILDER_DIGEST": "sha256:6458e6ce2b6448e31bfdced4be7d8aa88d389e6694ab09f5a718a694abe147f4",
+        "BUILDER_DIGEST": "sha256:74a21da88cf4b2e8fde34558376153c5cd80b00ca81da2e659387e76524edc73",
         "BASE_IMAGE": "ghcr.io/runlix/distroless-runtime",
         "BASE_TAG": "stable",
         "BASE_DIGEST": "sha256:0ed84fad112cd503c3cc9b9daa5ca42c5a812cfc3169ee4a197251d65fa07f79",
@@ -35,7 +35,7 @@
       "build_args": {
         "BUILDER_IMAGE": "docker.io/library/debian",
         "BUILDER_TAG": "bookworm-slim",
-        "BUILDER_DIGEST": "sha256:1c5d4fd0caad88eb6cb62bcdbc2f580ef2523ab69e86abc2bd2a94703aac9f96",
+        "BUILDER_DIGEST": "sha256:210137e2083cc9cd391a5117ff97e158fb8e69b984063e585732aac86216d60e",
         "BASE_IMAGE": "ghcr.io/runlix/distroless-runtime",
         "BASE_TAG": "stable",
         "BASE_DIGEST": "sha256:4c83b8e7f261094503e657220448292639347344c7284152308cd9d4496bf5ac",
@@ -56,7 +56,7 @@
       "build_args": {
         "BUILDER_IMAGE": "docker.io/library/debian",
         "BUILDER_TAG": "bookworm-slim",
-        "BUILDER_DIGEST": "sha256:6458e6ce2b6448e31bfdced4be7d8aa88d389e6694ab09f5a718a694abe147f4",
+        "BUILDER_DIGEST": "sha256:74a21da88cf4b2e8fde34558376153c5cd80b00ca81da2e659387e76524edc73",
         "BASE_IMAGE": "ghcr.io/runlix/distroless-runtime",
         "BASE_TAG": "debug",
         "BASE_DIGEST": "sha256:fe39b716a029f1eb8c0746a910a10e32e059e17a9665b0e85c7e4dd417db4b2b",
@@ -77,7 +77,7 @@
       "build_args": {
         "BUILDER_IMAGE": "docker.io/library/debian",
         "BUILDER_TAG": "bookworm-slim",
-        "BUILDER_DIGEST": "sha256:1c5d4fd0caad88eb6cb62bcdbc2f580ef2523ab69e86abc2bd2a94703aac9f96",
+        "BUILDER_DIGEST": "sha256:210137e2083cc9cd391a5117ff97e158fb8e69b984063e585732aac86216d60e",
         "BASE_IMAGE": "ghcr.io/runlix/distroless-runtime",
         "BASE_TAG": "debug",
         "BASE_DIGEST": "sha256:ddaf9198eaab9e3638f882deeba10e7b71f23897fb8eda9fafd626f3dd1bf4be",
