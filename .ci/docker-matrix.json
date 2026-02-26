@@ -17,7 +17,7 @@
         "BUILDER_DIGEST": "sha256:74a21da88cf4b2e8fde34558376153c5cd80b00ca81da2e659387e76524edc73",
         "BASE_IMAGE": "ghcr.io/runlix/distroless-runtime",
         "BASE_TAG": "stable",
-        "BASE_DIGEST": "sha256:0ed84fad112cd503c3cc9b9daa5ca42c5a812cfc3169ee4a197251d65fa07f79",
+        "BASE_DIGEST": "sha256:4fbf76e209686ae07adfc04f4ae93e7d0399e7b29dd105977494bd8913f7c7c8",
         "PACKAGE_URL": "https://github.com/transmission/transmission/releases/download/4.1.1/transmission-4.1.1.tar.xz"
       },
       "test_script": ".ci/smoke-test.sh"
@@ -38,7 +38,7 @@
         "BUILDER_DIGEST": "sha256:210137e2083cc9cd391a5117ff97e158fb8e69b984063e585732aac86216d60e",
         "BASE_IMAGE": "ghcr.io/runlix/distroless-runtime",
         "BASE_TAG": "stable",
-        "BASE_DIGEST": "sha256:4c83b8e7f261094503e657220448292639347344c7284152308cd9d4496bf5ac",
+        "BASE_DIGEST": "sha256:c581f1316adbfdf7a3b168d233abe8288c16ca3cd46b5aa2fc7b2d6cc8e61cb8",
         "PACKAGE_URL": "https://github.com/transmission/transmission/releases/download/4.1.1/transmission-4.1.1.tar.xz"
       },
       "test_script": ".ci/smoke-test.sh"
@@ -59,7 +59,7 @@
         "BUILDER_DIGEST": "sha256:74a21da88cf4b2e8fde34558376153c5cd80b00ca81da2e659387e76524edc73",
         "BASE_IMAGE": "ghcr.io/runlix/distroless-runtime",
         "BASE_TAG": "debug",
-        "BASE_DIGEST": "sha256:fe39b716a029f1eb8c0746a910a10e32e059e17a9665b0e85c7e4dd417db4b2b",
+        "BASE_DIGEST": "sha256:92ecb72e64a2f40022bbf7d01df9100080121e7cb791e3570c1390c78ef0e420",
         "PACKAGE_URL": "https://github.com/transmission/transmission/releases/download/4.1.1/transmission-4.1.1.tar.xz"
       },
       "test_script": ".ci/smoke-test.sh"
@@ -80,7 +80,7 @@
         "BUILDER_DIGEST": "sha256:210137e2083cc9cd391a5117ff97e158fb8e69b984063e585732aac86216d60e",
         "BASE_IMAGE": "ghcr.io/runlix/distroless-runtime",
         "BASE_TAG": "debug",
-        "BASE_DIGEST": "sha256:ddaf9198eaab9e3638f882deeba10e7b71f23897fb8eda9fafd626f3dd1bf4be",
+        "BASE_DIGEST": "sha256:220f2faee3c9e9aa25c8f2ab5a994abd97bba156816ef0be81d282f479d4cc95",
         "PACKAGE_URL": "https://github.com/transmission/transmission/releases/download/4.1.1/transmission-4.1.1.tar.xz"
       },
       "test_script": ".ci/smoke-test.sh"
