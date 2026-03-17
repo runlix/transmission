@@ -14,7 +14,7 @@
       "build_args": {
         "BUILDER_IMAGE": "docker.io/library/debian",
         "BUILDER_TAG": "bookworm-slim",
-        "BUILDER_DIGEST": "sha256:74a21da88cf4b2e8fde34558376153c5cd80b00ca81da2e659387e76524edc73",
+        "BUILDER_DIGEST": "sha256:8af0e5095f9964007f5ebd11191dfe52dcb51bf3afa2c07f055fc5451b78ba0e",
         "BASE_IMAGE": "ghcr.io/runlix/distroless-runtime",
         "BASE_TAG": "stable",
         "BASE_DIGEST": "sha256:4fbf76e209686ae07adfc04f4ae93e7d0399e7b29dd105977494bd8913f7c7c8",
@@ -35,7 +35,7 @@
       "build_args": {
         "BUILDER_IMAGE": "docker.io/library/debian",
         "BUILDER_TAG": "bookworm-slim",
-        "BUILDER_DIGEST": "sha256:210137e2083cc9cd391a5117ff97e158fb8e69b984063e585732aac86216d60e",
+        "BUILDER_DIGEST": "sha256:ee5473f786ff8a4e03409277c276b459b29afa55a84268bef55342c4f705b7ad",
         "BASE_IMAGE": "ghcr.io/runlix/distroless-runtime",
         "BASE_TAG": "stable",
         "BASE_DIGEST": "sha256:c581f1316adbfdf7a3b168d233abe8288c16ca3cd46b5aa2fc7b2d6cc8e61cb8",
@@ -56,7 +56,7 @@
       "build_args": {
         "BUILDER_IMAGE": "docker.io/library/debian",
         "BUILDER_TAG": "bookworm-slim",
-        "BUILDER_DIGEST": "sha256:74a21da88cf4b2e8fde34558376153c5cd80b00ca81da2e659387e76524edc73",
+        "BUILDER_DIGEST": "sha256:8af0e5095f9964007f5ebd11191dfe52dcb51bf3afa2c07f055fc5451b78ba0e",
         "BASE_IMAGE": "ghcr.io/runlix/distroless-runtime",
         "BASE_TAG": "debug",
         "BASE_DIGEST": "sha256:92ecb72e64a2f40022bbf7d01df9100080121e7cb791e3570c1390c78ef0e420",
@@ -77,7 +77,7 @@
       "build_args": {
         "BUILDER_IMAGE": "docker.io/library/debian",
         "BUILDER_TAG": "bookworm-slim",
-        "BUILDER_DIGEST": "sha256:210137e2083cc9cd391a5117ff97e158fb8e69b984063e585732aac86216d60e",
+        "BUILDER_DIGEST": "sha256:ee5473f786ff8a4e03409277c276b459b29afa55a84268bef55342c4f705b7ad",
         "BASE_IMAGE": "ghcr.io/runlix/distroless-runtime",
         "BASE_TAG": "debug",
         "BASE_DIGEST": "sha256:220f2faee3c9e9aa25c8f2ab5a994abd97bba156816ef0be81d282f479d4cc95",
