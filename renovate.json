@@ -1,35 +1,63 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "description": "Renovate configuration for docker-matrix.json updates",
+  "description": "Renovate configuration for build-workflow pins and release image references",
   "extends": [
-    "config:recommended"
+    "config:recommended",
+    "helpers:pinGitHubActionDigests"
   ],
-  "baseBranches": ["release"],
+  "baseBranchPatterns": ["$default", "release"],
   "customManagers": [
     {
       "customType": "regex",
-      "description": "Update Debian builder images (BUILDER_TAG + BUILDER_DIGEST) - https://docs.renovatebot.com/modules/manager/regex/",
-      "fileMatch": ["^\\.ci/docker-matrix\\.json$"],
-      "matchStrings": [
-        "\"BUILDER_TAG\"\\s*:\\s*\"(?<currentValue>[^\"]+)\"[\\s\\S]*?\"BUILDER_DIGEST\"\\s*:\\s*\"(?<currentDigest>sha256:[a-f0-9]{64})\""
+      "description": "Update build-workflow main SHA pins across workflows and schema URLs",
+      "managerFilePatterns": [
+        "/^\\.github\\/workflows\\/.*\\.ya?ml$/",
+        "/^\\.ci\\/build\\.json$/"
       ],
-      "depNameTemplate": "docker.io/library/debian",
-      "datasourceTemplate": "docker"
+      "matchStrings": [
+        "runlix/build-workflow/\\.github/workflows/[^@\\s]+@(?<currentDigest>[a-f0-9]{40})",
+        "ghcr\\.io/runlix/build-workflow-tools:sha-(?<currentDigest>[a-f0-9]{40})",
+        "https://raw\\.githubusercontent\\.com/runlix/build-workflow/(?<currentDigest>[a-f0-9]{40})/schema/build-config\\.schema\\.json"
+      ],
+      "currentValueTemplate": "main",
+      "depNameTemplate": "runlix/build-workflow",
+      "packageNameTemplate": "https://github.com/runlix/build-workflow",
+      "datasourceTemplate": "git-refs"
     },
     {
       "customType": "regex",
-      "description": "Update Distroless runtime base images (BASE_TAG + BASE_DIGEST) - https://docs.renovatebot.com/modules/datasource/docker/",
-      "fileMatch": ["^\\.ci/docker-matrix\\.json$"],
-      "matchStrings": [
-        "\"BASE_TAG\"\\s*:\\s*\"(?<currentValue>[^\"]+)\"[\\s\\S]*?\"BASE_DIGEST\"\\s*:\\s*\"(?<currentDigest>sha256:[a-f0-9]{64})\""
+      "description": "Update Debian builder refs in release build config and Dockerfiles",
+      "managerFilePatterns": [
+        "/^\\.ci\\/build\\.json$/",
+        "/^linux-(amd64|arm64)\\.Dockerfile$/"
       ],
-      "depNameTemplate": "ghcr.io/runlix/distroless-runtime",
-      "datasourceTemplate": "docker"
+      "matchStrings": [
+        "\"BUILDER_REF\"\\s*:\\s*\"(?<depName>docker\\.io/library/debian):(?<currentValue>[^\"@]+)@(?<currentDigest>sha256:[a-f0-9]{64})\"",
+        "ARG BUILDER_REF=\"(?<depName>docker\\.io/library/debian):(?<currentValue>[^\"@]+)@(?<currentDigest>sha256:[a-f0-9]{64})\""
+      ],
+      "datasourceTemplate": "docker",
+      "versioningTemplate": "docker"
     },
     {
       "customType": "regex",
-      "description": "Update Transmission version from GitHub releases - https://docs.renovatebot.com/modules/datasource/github-releases/",
-      "fileMatch": ["^\\.ci/docker-matrix\\.json$"],
+      "description": "Update Distroless base refs in release build config and Dockerfiles",
+      "managerFilePatterns": [
+        "/^\\.ci\\/build\\.json$/",
+        "/^linux-(amd64|arm64)\\.Dockerfile$/"
+      ],
+      "matchStrings": [
+        "\"BASE_REF\"\\s*:\\s*\"(?<depName>ghcr\\.io/runlix/distroless-runtime-v2-canary):(?<currentValue>[^\"@]+)@(?<currentDigest>sha256:[a-f0-9]{64})\"",
+        "ARG BASE_REF=\"(?<depName>ghcr\\.io/runlix/distroless-runtime-v2-canary):(?<currentValue>[^\"@]+)@(?<currentDigest>sha256:[a-f0-9]{64})\""
+      ],
+      "datasourceTemplate": "docker",
+      "versioningTemplate": "docker"
+    },
+    {
+      "customType": "regex",
+      "description": "Update Transmission version from GitHub releases",
+      "managerFilePatterns": [
+        "/^\\.ci\\/build\\.json$/"
+      ],
       "matchStrings": [
         "\"version\"\\s*:\\s*\"(?<currentValue>[^\"]+)\""
       ],
@@ -40,7 +68,9 @@
     {
       "customType": "regex",
       "description": "Update Transmission package URLs from GitHub releases",
-      "fileMatch": ["^\\.ci/docker-matrix\\.json$"],
+      "managerFilePatterns": [
+        "/^\\.ci\\/build\\.json$/"
+      ],
       "matchStrings": [
         "\"PACKAGE_URL\"\\s*:\\s*\"https://github\\.com/(?<depName>[^/]+/[^/]+)/releases/download/v?(?<currentValue>[^/]+)/[^\"]+\""
       ],
@@ -50,27 +80,38 @@
   ],
   "packageRules": [
     {
-      "description": "Group all docker-matrix.json updates into daily PRs",
-      "matchFileNames": ["**/.ci/docker-matrix.json"],
-      "groupName": "Docker base images",
-      "schedule": ["before 3am"]
+      "description": "Manage build-workflow reusable workflow refs atomically via regex",
+      "matchManagers": ["github-actions"],
+      "matchPackageNames": ["runlix/build-workflow"],
+      "enabled": false
     },
     {
-      "description": "Separate Debian builder updates - https://docs.renovatebot.com/configuration-options/#packagerules",
+      "description": "Group build-workflow main SHA updates",
+      "matchManagers": ["custom.regex"],
+      "matchDatasources": ["git-refs"],
+      "matchDepNames": ["runlix/build-workflow"],
+      "groupName": "Build Workflow pins",
+      "commitMessageTopic": "build-workflow pin",
+      "rebaseWhen": "behind-base-branch"
+    },
+    {
+      "description": "Group Debian builder updates",
+      "matchManagers": ["custom.regex"],
       "matchDatasources": ["docker"],
       "matchPackageNames": ["docker.io/library/debian"],
       "groupName": "Debian builder",
       "commitMessageTopic": "Debian builder image"
     },
     {
-      "description": "Separate Distroless runtime base updates",
+      "description": "Group Distroless base updates",
+      "matchManagers": ["custom.regex"],
       "matchDatasources": ["docker"],
-      "matchPackageNames": ["ghcr.io/runlix/distroless-runtime"],
-      "groupName": "Distroless runtime",
-      "commitMessageTopic": "Distroless runtime base image"
+      "matchPackageNames": ["ghcr.io/runlix/distroless-runtime-v2-canary"],
+      "groupName": "Distroless base",
+      "commitMessageTopic": "Distroless base image"
     },
     {
-      "description": "Group Transmission version and package URL updates with auto-merge - https://docs.renovatebot.com/key-concepts/automerge/",
+      "description": "Group Transmission version and package URL updates with auto-merge",
       "matchDatasources": ["github-releases"],
       "matchPackageNames": ["transmission/transmission"],
       "groupName": "Transmission release",
@@ -80,8 +121,10 @@
       "automergeStrategy": "squash"
     },
     {
-      "description": "Auto-merge digest-only updates (security patches) - https://docs.renovatebot.com/key-concepts/automerge/",
-      "matchFileNames": ["**/.ci/docker-matrix.json"],
+      "description": "Auto-merge digest-only Docker ref updates",
+      "matchManagers": ["custom.regex"],
+      "matchDatasources": ["docker"],
+      "matchFileNames": ["**/.ci/build.json", "linux-*.Dockerfile"],
       "matchUpdateTypes": ["digest"],
       "automerge": true,
       "automergeType": "pr",
