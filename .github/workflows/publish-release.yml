@@ -1,0 +1,68 @@
+name: Publish Release
+
+on:
+  push:
+    branches:
+      - release
+    paths:
+      - ".ci/build.json"
+      - ".ci/*.sh"
+      - ".dockerignore"
+      - "linux-*.Dockerfile"
+      - ".github/workflows/publish-release.yml"
+  workflow_dispatch:
+
+permissions:
+  attestations: write
+  contents: read
+  id-token: write
+  packages: write
+
+jobs:
+  publish:
+    uses: runlix/build-workflow/.github/workflows/publish-release.yml@c5acba22d15a58c37df6da817cafba993ad38132
+    with:
+      tool-image: ghcr.io/runlix/build-workflow-tools:sha-c5acba22d15a58c37df6da817cafba993ad38132
+    secrets:
+      RUNLIX_APP_ID: ${{ secrets.RUNLIX_APP_ID }}
+      RUNLIX_PRIVATE_KEY: ${{ secrets.RUNLIX_PRIVATE_KEY }}
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+
+  summarize-release:
+    name: summarize-release
+    needs:
+      - publish
+    if: ${{ needs.publish.outputs.release_json != '' }}
+    permissions:
+      contents: read
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Validate reusable workflow outputs
+        env:
+          IMAGE_NAME: ${{ needs.publish.outputs.image }}
+          MANIFESTS_JSON: ${{ needs.publish.outputs.manifests_json }}
+          RELEASE_JSON: ${{ needs.publish.outputs.release_json }}
+          SYNC_PR_URL: ${{ needs.publish.outputs.sync_pr_url }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          [ "$IMAGE_NAME" = "ghcr.io/runlix/transmission" ]
+          printf '%s\n' "$RELEASE_JSON" > /tmp/release.json
+          jq -e '.image == "ghcr.io/runlix/transmission"' /tmp/release.json > /dev/null
+          jq -e '.manifests | length == 2' /tmp/release.json > /dev/null
+          jq -e 'length == 2' <<< "$MANIFESTS_JSON" > /dev/null
+
+          {
+            echo "## Release Outputs"
+            echo ""
+            echo "- Image: \`$IMAGE_NAME\`"
+            echo "- Published at: \`$(jq -r '.published_at' /tmp/release.json)\`"
+            echo "- Manifest count: \`$(jq '.manifests | length' /tmp/release.json)\`"
+            if [ -n "$SYNC_PR_URL" ]; then
+              echo "- Sync PR: $SYNC_PR_URL"
+            else
+              echo "- Sync PR: not created"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"

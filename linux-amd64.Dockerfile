@@ -1,28 +1,14 @@
-# Builder tag from VERSION.json builder.tag (e.g., "bookworm-slim")
-ARG BUILDER_TAG=bookworm-slim
-# Base tag (variant-arch) from VERSION.json base.tag (e.g., "release-2025.12.29.1-linux-amd64-latest")
-ARG BASE_TAG=release-2025.12.29.1-linux-amd64-latest
-# Selected digests (build script will set based on target configuration)
-# Default to empty string - build script should always provide valid digests
-# If empty, FROM will fail (which is desired to enforce digest pinning)
-ARG BUILDER_DIGEST=""
-ARG BASE_DIGEST=""
-# Package URL from VERSION.json package_url
-ARG PACKAGE_URL=""
-# unrar version - source available at https://www.rarlab.com/rar_add.htm
+ARG BUILDER_REF="docker.io/library/debian:bookworm-slim@sha256:8af0e5095f9964007f5ebd11191dfe52dcb51bf3afa2c07f055fc5451b78ba0e"
+ARG BASE_REF="ghcr.io/runlix/distroless-runtime-v2-canary:stable@sha256:6f96f11dbb9d8f6e76672e73bbf743dbec36d2e4f6d29250151a48379a8c66dd"
+ARG PACKAGE_URL="https://github.com/transmission/transmission/releases/download/4.1.1/transmission-4.1.1.tar.xz"
 ARG UNRAR_VERSION=7.2.3
 
-# STAGE 1 — fetch Transmission source
-# Build script will pass BUILDER_TAG and BUILDER_DIGEST from VERSION.json
-# Format: debian:bookworm-slim@sha256:digest (when digest provided)
-FROM docker.io/library/debian:${BUILDER_TAG}@${BUILDER_DIGEST} AS fetch
+FROM ${BUILDER_REF} AS fetch
 
-# Redeclare ARG in this stage so it's available for use in RUN commands
 ARG PACKAGE_URL
 
 WORKDIR /app
 
-# Use BuildKit cache mounts to persist apt cache between builds
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
     apt-get update && apt-get install -y --no-install-recommends \
@@ -37,13 +23,10 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
  && chmod -R u=rwX,go=rX /app/transmission \
  && rm transmission.tar.xz
 
-# STAGE 2 — build Transmission and dependencies
-# Build script will pass BUILDER_TAG and BUILDER_DIGEST from VERSION.json
-FROM docker.io/library/debian:${BUILDER_TAG}@${BUILDER_DIGEST} AS transmission-deps
+FROM ${BUILDER_REF} AS transmission-deps
 
 ARG UNRAR_VERSION
 
-# Use BuildKit cache mounts to persist apt cache between builds
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
     apt-get update && apt-get install -y --no-install-recommends \
@@ -71,8 +54,6 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     python3 \
 && rm -rf /var/lib/apt/lists/*
 
-# Build unrar from source
-# Source available at https://www.rarlab.com/rar_add.htm
 WORKDIR /tmp
 RUN curl -fsSL "https://www.rarlab.com/rar/unrarsrc-${UNRAR_VERSION}.tar.gz" -o unrar.tar.gz \
  && tar -xzf unrar.tar.gz \
@@ -83,8 +64,6 @@ RUN curl -fsSL "https://www.rarlab.com/rar/unrarsrc-${UNRAR_VERSION}.tar.gz" -o 
  && cd /tmp \
  && rm -rf unrar unrar.tar.gz
 
-# Build transmission from source
-# Copy source from fetch stage
 COPY --from=fetch /app/transmission /tmp/transmission
 
 WORKDIR /tmp/transmission
@@ -99,146 +78,55 @@ RUN cmake -B build \
  && cmake --build build \
  && cmake --install build --prefix /usr/local
 
-# Copy web UI files from source tree to expected location
-# Transmission expects web UI at /usr/share/transmission/public_html/ (or /usr/local/share/transmission/public_html/ with prefix)
 RUN mkdir -p /usr/local/share/transmission/public_html && \
     cp -r /tmp/transmission/web/* /usr/local/share/transmission/public_html/
 
-# Identify library dependencies using ldd
-# #region agent log - Debug: Check all library dependencies including transitive ones
-RUN ldd /usr/local/bin/transmission-daemon > /tmp/transmission_deps.txt 2>&1 || true && \
-    ldd /usr/local/bin/transmission-cli >> /tmp/transmission_deps.txt 2>&1 || true && \
-    ldd /usr/local/bin/transmission-remote >> /tmp/transmission_deps.txt 2>&1 || true && \
-    echo "=== Transmission library dependencies ===" && \
-    cat /tmp/transmission_deps.txt && \
-    echo "=== Checking libcurl dependencies ===" && \
-    ldd /usr/lib/x86_64-linux-gnu/libcurl.so.4 > /tmp/libcurl_deps.txt 2>&1 || true && \
-    cat /tmp/libcurl_deps.txt && \
-    echo "=== Checking librtmp dependencies ===" && \
-    (ldd /usr/lib/x86_64-linux-gnu/librtmp.so.1 > /tmp/librtmp_deps.txt 2>&1 || true) && \
-    cat /tmp/librtmp_deps.txt && \
-    echo "=== Finding all nghttp2 libraries ===" && \
-    find /usr/lib -name "*nghttp2*" -type f 2>/dev/null | head -10 && \
-    echo "=== Finding all librtmp libraries ===" && \
-    find /usr/lib -name "*rtmp*" -type f 2>/dev/null | head -10 && \
-    echo "=== Finding all libssh2 libraries ===" && \
-    find /usr/lib -name "*ssh2*" -type f 2>/dev/null | head -10 && \
-    echo "=== Finding all libpsl libraries ===" && \
-    find /usr/lib -name "*psl*" -type f 2>/dev/null | head -10 && \
-    echo "=== Finding all libgssapi_krb5 libraries ===" && \
-    find /usr/lib -name "*gssapi*" -type f 2>/dev/null | head -10 && \
-    echo "=== Finding all krb5 libraries ===" && \
-    find /usr/lib -name "*krb5*" -type f 2>/dev/null | head -10 && \
-    echo "=== Finding all libldap libraries ===" && \
-    find /usr/lib -name "*ldap*" -type f 2>/dev/null | head -10 && \
-    echo "=== Finding all liblber libraries ===" && \
-    find /usr/lib -name "*lber*" -type f 2>/dev/null | head -10 && \
-    echo "=== Finding all brotli libraries ===" && \
-    find /usr/lib -name "*brotli*" -type f 2>/dev/null | head -10 && \
-    echo "=== All unique library paths from ldd ===" && \
-    (ldd /usr/local/bin/transmission-daemon 2>&1 | grep "=>" | awk '{print $3}' | sort -u > /tmp/all_libs.txt || true) && \
-    (ldd /usr/lib/x86_64-linux-gnu/libcurl.so.4 2>&1 | grep "=>" | awk '{print $3}' | sort -u >> /tmp/all_libs.txt || true) && \
-    (ldd /usr/lib/x86_64-linux-gnu/librtmp.so.1 2>&1 | grep "=>" | awk '{print $3}' | sort -u >> /tmp/all_libs.txt || true) && \
-    (ldd /usr/lib/x86_64-linux-gnu/libssh2.so.1 2>&1 | grep "=>" | awk '{print $3}' | sort -u >> /tmp/all_libs.txt || true) && \
-    (ldd /usr/lib/x86_64-linux-gnu/libpsl.so.5 2>&1 | grep "=>" | awk '{print $3}' | sort -u >> /tmp/all_libs.txt || true) && \
-    (ldd /usr/lib/x86_64-linux-gnu/libgssapi_krb5.so.2 2>&1 | grep "=>" | awk '{print $3}' | sort -u >> /tmp/all_libs.txt || true) && \
-    (ldd /usr/lib/x86_64-linux-gnu/libkrb5.so.3 2>&1 | grep "=>" | awk '{print $3}' | sort -u >> /tmp/all_libs.txt || true) && \
-    (ldd /usr/lib/x86_64-linux-gnu/libk5crypto.so.3 2>&1 | grep "=>" | awk '{print $3}' | sort -u >> /tmp/all_libs.txt || true) && \
-    (ldd /usr/lib/x86_64-linux-gnu/libkrb5support.so.0 2>&1 | grep "=>" | awk '{print $3}' | sort -u >> /tmp/all_libs.txt || true) && \
-    (ldd /usr/lib/x86_64-linux-gnu/libldap-2.5.so.0 2>&1 | grep "=>" | awk '{print $3}' | sort -u >> /tmp/all_libs.txt || true) && \
-    (ldd /usr/lib/x86_64-linux-gnu/liblber-2.5.so.0 2>&1 | grep "=>" | awk '{print $3}' | sort -u >> /tmp/all_libs.txt || true) && \
-    (ldd /usr/lib/x86_64-linux-gnu/libbrotlidec.so.1 2>&1 | grep "=>" | awk '{print $3}' | sort -u >> /tmp/all_libs.txt || true) && \
-    sort -u /tmp/all_libs.txt > /tmp/unique_libs.txt && \
-    echo "=== All unique libraries needed ===" && \
-    cat /tmp/unique_libs.txt
-# #endregion agent log
+FROM ${BASE_REF}
 
-# STAGE 3 — distroless final image
-# Build script will pass BASE_TAG (from VERSION.json base.tag) and BASE_DIGEST
-# Format: ghcr.io/runlix/distroless-runtime:release-2025.12.29.1-linux-amd64-latest@sha256:digest (when digest provided)
-FROM ghcr.io/runlix/distroless-runtime:${BASE_TAG}@${BASE_DIGEST}
-
-# Hardcoded for amd64 - no conditionals needed!
 ARG LIB_DIR=x86_64-linux-gnu
-ARG LD_SO=ld-linux-x86-64.so.2
 
-# Copy transmission binaries
 COPY --from=transmission-deps /usr/local/bin/transmission-daemon /usr/local/bin/transmission-daemon
 COPY --from=transmission-deps /usr/local/bin/transmission-cli /usr/local/bin/transmission-cli
 COPY --from=transmission-deps /usr/local/bin/transmission-remote /usr/local/bin/transmission-remote
 
-# Copy transmission web UI files to expected location
 COPY --from=transmission-deps /usr/local/share/transmission/public_html /usr/share/transmission/public_html
 
-# Copy unrar binary
 COPY --from=transmission-deps /usr/local/bin/unrar /usr/local/bin/unrar
 
-# Copy utilities
 COPY --from=transmission-deps /usr/bin/find /usr/bin/find
 COPY --from=transmission-deps /usr/bin/7za /usr/bin/7za
 
-# Copy required shared libraries - combined into fewer layers by grouping related libraries
-# libcurl libraries
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libcurl.so.* /usr/lib/${LIB_DIR}/
-# libnghttp2 (transitive dependency of libcurl for HTTP/2 support)
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libnghttp2.so.* /usr/lib/${LIB_DIR}/
-# librtmp (transitive dependency of libcurl for RTMP support)
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/librtmp.so.* /usr/lib/${LIB_DIR}/
-# libssh2 (transitive dependency of libcurl for SSH/SFTP support)
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libssh2.so.* /usr/lib/${LIB_DIR}/
-# libpsl (transitive dependency of libcurl for Public Suffix List support)
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libpsl.so.* /usr/lib/${LIB_DIR}/
-# libgssapi_krb5 (transitive dependency of libcurl for Kerberos/GSSAPI support)
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libgssapi_krb5.so.* /usr/lib/${LIB_DIR}/
-# libkrb5 (transitive dependency of libgssapi_krb5 for Kerberos support)
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libkrb5.so.* /usr/lib/${LIB_DIR}/
-# libk5crypto (transitive dependency of libkrb5 for Kerberos cryptography support)
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libk5crypto.so.* /usr/lib/${LIB_DIR}/
-# libkrb5support (transitive dependency of libkrb5 for Kerberos support)
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libkrb5support.so.* /usr/lib/${LIB_DIR}/
-# libldap (transitive dependency of libcurl for LDAP support)
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libldap-*.so.* /usr/lib/${LIB_DIR}/
-# liblber (transitive dependency of libldap for LDAP Basic Encoding Rules)
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/liblber-*.so.* /usr/lib/${LIB_DIR}/
-# libbrotlidec (transitive dependency of libcurl for Brotli decompression support)
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libbrotlidec.so.* /usr/lib/${LIB_DIR}/
-# libbrotlicommon (transitive dependency of libbrotlidec)
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libbrotlicommon.so.* /usr/lib/${LIB_DIR}/
-# libcom_err (transitive dependency of libkrb5/libk5crypto)
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libcom_err.so.* /usr/lib/${LIB_DIR}/
-# libidn2 (transitive dependency of libcurl)
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libidn2.so.* /usr/lib/${LIB_DIR}/
-# libunistring (transitive dependency of libidn2)
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libunistring.so.* /usr/lib/${LIB_DIR}/
-# libkeyutils (transitive dependency of libkrb5)
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libkeyutils.so.* /usr/lib/${LIB_DIR}/
-# libsasl2 (transitive dependency of libldap)
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libsasl2.so.* /usr/lib/${LIB_DIR}/
-# libzstd (transitive dependency)
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libzstd.so.* /usr/lib/${LIB_DIR}/
-# libgnutls (transitive dependency, possibly of librtmp)
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libgnutls.so.* /usr/lib/${LIB_DIR}/
-# libnettle (transitive dependency of libgnutls)
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libnettle.so.* /usr/lib/${LIB_DIR}/
-# libhogweed (transitive dependency of libgnutls)
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libhogweed.so.* /usr/lib/${LIB_DIR}/
-# libgmp (transitive dependency of libnettle/libhogweed)
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libgmp.so.* /usr/lib/${LIB_DIR}/
-# libp11-kit (transitive dependency of libgnutls)
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libp11-kit.so.* /usr/lib/${LIB_DIR}/
-# libtasn1 (transitive dependency of libgnutls)
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libtasn1.so.* /usr/lib/${LIB_DIR}/
-# libffi (transitive dependency)
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libffi.so.* /usr/lib/${LIB_DIR}/
-# libevent libraries
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libevent-*.so.* /usr/lib/${LIB_DIR}/
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libevent_pthreads-*.so.* /usr/lib/${LIB_DIR}/
-# zlib libraries
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libz.so.* /usr/lib/${LIB_DIR}/
-# libminiupnpc libraries
 COPY --from=transmission-deps /usr/lib/${LIB_DIR}/libminiupnpc.so.* /usr/lib/${LIB_DIR}/
 
 WORKDIR /config
 USER 65532:65532
 ENTRYPOINT ["/usr/local/bin/transmission-daemon", "--foreground", "--config-dir", "/config"]
-
