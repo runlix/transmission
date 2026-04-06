@@ -1,0 +1,28 @@
+name: Validate Release Metadata
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+    paths:
+      - "README.md"
+      - "links.json"
+      - "release.json"
+      - "renovate.json"
+      - ".github/workflows/validate-release-metadata.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-release-metadata:
+    name: validate-release-metadata
+    uses: runlix/build-workflow/.github/workflows/validate-release-metadata.yml@c5acba22d15a58c37df6da817cafba993ad38132
+    with:
+      release-json-path: release.json
+      tool-image: ghcr.io/runlix/build-workflow-tools:sha-c5acba22d15a58c37df6da817cafba993ad38132
