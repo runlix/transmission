@@ -1,4 +1,4 @@
-ARG BUILDER_REF="docker.io/library/debian:bookworm-slim@sha256:0d49f9bc3af362aa0921b14b2f5c612a902ab6f7c2cac8d7026ade96fd0b9f6c"
+ARG BUILDER_REF="docker.io/library/debian:bookworm-slim@sha256:26d52380dd92c79effe0f36c1316855b3bbf67909fd1d72bd36e2933ae1f0486"
 ARG BASE_REF="ghcr.io/runlix/distroless-runtime-v2-canary:stable@sha256:a39da96f68c2145594b573baeed3858c9f032e186997efdba9a005cc79563cb9"
 ARG PACKAGE_URL="https://github.com/transmission/transmission/releases/download/4.1.1/transmission-4.1.1.tar.xz"
 ARG UNRAR_VERSION=7.2.3
