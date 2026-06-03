@@ -1,13 +1,13 @@
 {
   "image": "ghcr.io/runlix/transmission",
-  "version": "4.1.1",
-  "sha": "01a868fe17094f87420837132b274308b4958f60",
-  "short_sha": "01a868f",
-  "published_at": "2026-05-20T05:14:15Z",
+  "version": "4.1.2",
+  "sha": "1fed1c34c6e6f1d1281fa3d21279e1598b6f75d8",
+  "short_sha": "1fed1c3",
+  "published_at": "2026-06-03T01:40:26Z",
   "manifests": [
     {
       "tag": "4.1.1-debug",
-      "digest": "sha256:19aad495439e29aaab9e15ca807f77dc567fa0851d68c41576410a1883951649",
+      "digest": "sha256:448d8102e5f3f6c84bb6ed825f5f5198d9540121e9f5bd8e6b337b1677d758a4",
       "platforms": [
         "linux/amd64",
         "linux/arm64"
@@ -15,7 +15,7 @@
     },
     {
       "tag": "4.1.1-stable",
-      "digest": "sha256:6b847e5c9d4fbb5ffc624c27d11cfc1ae443d2b9fd605614ebb876350f781f38",
+      "digest": "sha256:a7a80fa6aa95db55b9e4ab1b8deab2fe97023512da6ab594577f477f221e78b2",
       "platforms": [
         "linux/amd64",
         "linux/arm64"
