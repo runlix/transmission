@@ -13,7 +13,7 @@
       "dockerfile": "linux-amd64.Dockerfile",
       "build_args": {
         "BASE_REF": "ghcr.io/runlix/distroless-runtime-v2-canary:stable@sha256:7b02520205fe4ba31191c32dfff3ff38cba0990b6f1f6c95e189d58b82522240",
-        "BUILDER_REF": "docker.io/library/debian:bookworm-slim@sha256:b29f74a267526ae6ea104eed6c46133b0ca70ce812525df8cd5817698f0a624a",
+        "BUILDER_REF": "docker.io/library/debian:bookworm-slim@sha256:35ae959f6e83ffb465e7614d27b4fddd28288caa551fbca2798367567cce80d3",
         "PACKAGE_URL": "https://github.com/transmission/transmission/releases/download/4.1.2/transmission-4.1.2.tar.xz"
       }
     },
@@ -24,7 +24,7 @@
       "dockerfile": "linux-arm64.Dockerfile",
       "build_args": {
         "BASE_REF": "ghcr.io/runlix/distroless-runtime-v2-canary:stable@sha256:7b02520205fe4ba31191c32dfff3ff38cba0990b6f1f6c95e189d58b82522240",
-        "BUILDER_REF": "docker.io/library/debian:bookworm-slim@sha256:f1433d3ee18e12f45682b29d91b6356e54e40d6b47f5f8ac81e80f35cca8cfe7",
+        "BUILDER_REF": "docker.io/library/debian:bookworm-slim@sha256:1663827ae94a92b1f374b5daf5fe2bf55303e7e7c61b84ef9663e654224a5857",
         "PACKAGE_URL": "https://github.com/transmission/transmission/releases/download/4.1.2/transmission-4.1.2.tar.xz"
       }
     },
@@ -35,7 +35,7 @@
       "dockerfile": "linux-amd64.Dockerfile",
       "build_args": {
         "BASE_REF": "ghcr.io/runlix/distroless-runtime-v2-canary:debug@sha256:66dcf0c3df89aef5744374e9c5540708a6d53b0aa6566fd4306d77235d14326f",
-        "BUILDER_REF": "docker.io/library/debian:bookworm-slim@sha256:b29f74a267526ae6ea104eed6c46133b0ca70ce812525df8cd5817698f0a624a",
+        "BUILDER_REF": "docker.io/library/debian:bookworm-slim@sha256:35ae959f6e83ffb465e7614d27b4fddd28288caa551fbca2798367567cce80d3",
         "PACKAGE_URL": "https://github.com/transmission/transmission/releases/download/4.1.2/transmission-4.1.2.tar.xz"
       }
     },
@@ -46,7 +46,7 @@
       "dockerfile": "linux-arm64.Dockerfile",
       "build_args": {
         "BASE_REF": "ghcr.io/runlix/distroless-runtime-v2-canary:debug@sha256:66dcf0c3df89aef5744374e9c5540708a6d53b0aa6566fd4306d77235d14326f",
-        "BUILDER_REF": "docker.io/library/debian:bookworm-slim@sha256:f1433d3ee18e12f45682b29d91b6356e54e40d6b47f5f8ac81e80f35cca8cfe7",
+        "BUILDER_REF": "docker.io/library/debian:bookworm-slim@sha256:1663827ae94a92b1f374b5daf5fe2bf55303e7e7c61b84ef9663e654224a5857",
         "PACKAGE_URL": "https://github.com/transmission/transmission/releases/download/4.1.2/transmission-4.1.2.tar.xz"
       }
     }
